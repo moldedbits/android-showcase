@@ -1,0 +1,193 @@
+apply plugin: 'checkstyle'
+apply plugin: 'com.android.application'
+
+
+preBuild.dependsOn 'checkstyle'
+check.dependsOn 'checkstyle'
+
+// auto increment version stuff
+import com.moldedbits.showcase.MBIncrementVersionTask
+
+task incrementVersionTask(type: MBIncrementVersionTask)
+tasks.whenTaskAdded { task ->
+    if (task.name == 'generateReleaseBuildConfig') {
+        task.dependsOn 'incrementVersionTask'
+    }
+}
+
+task checkstyle(type: Checkstyle) {
+    configFile file("${project.rootDir}/config/quality/checkstyle.xml")
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/test/java/com/moldedbits/android/**'
+
+    classpath = files()
+
+    // set to false if you want to consider warning as error
+    ignoreFailures = false
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    final API_URL_DEV = "https://bookstore-mb.herokuapp.com/";
+    final API_URL_PROD = "https://bookstore-mb.herokuapp.com/";
+
+    defaultConfig {
+        applicationId "com.moldedbits.showcase"
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode incrementVersionTask.getCurrentVersionCode()
+        versionName incrementVersionTask.getCurrentVersionName()
+
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+
+        // setting custom name for apk
+        project.ext.set("archivesBaseName", "AndroidJumpstart-" + defaultConfig.versionName
+                + "-vc" + defaultConfig.versionCode);
+    }
+
+    signingConfigs {
+        // todo change as per app config
+        debugProd {
+            storeFile file("../jumpstart.keystore")
+            storePassword "moldedbits"
+            keyAlias "jumpstart"
+            keyPassword "moldedbits"
+        }
+        release {
+            storeFile file("../jumpstart.keystore")
+            storePassword "moldedbits"
+            keyAlias "jumpstart"
+            keyPassword "moldedbits"
+        }
+        releaseProd {
+            storeFile file("../jumpstart.keystore")
+            storePassword "moldedbits"
+            keyAlias "jumpstart"
+            keyPassword "moldedbits"
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            minifyEnabled false
+            buildConfigField 'String', 'API_URL', "\"" + API_URL_DEV + "\""
+        }
+
+        debugProd {
+            applicationIdSuffix '.debug'
+            minifyEnabled false
+            buildConfigField 'String', 'API_URL', "\"" + API_URL_PROD + "\""
+            signingConfig signingConfigs.debugProd
+        }
+
+        release {
+            applicationIdSuffix '.release'
+            buildConfigField 'String', 'API_URL', "\"" + API_URL_DEV + "\""
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        releaseProd {
+            buildConfigField 'String', 'API_URL', "\"" + API_URL_PROD + "\""
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.releaseProd
+        }
+    }
+
+    lintOptions {
+        // set to true to turn off analysis progress reporting by lint
+        quiet true
+        // if true, stop the gradle build if errors are found
+        abortOnError false
+        // if true, only report errors
+        ignoreWarnings false
+        // if true, emit full/absolute paths to files with errors (true by default)
+        //absolutePaths true
+        // if true, check all issues, including those that are off by default
+        checkAllWarnings true
+        // if true, treat all warnings as errors
+        warningsAsErrors false
+        // turn off checking the given issue id's
+        disable 'TypographyFractions', 'TypographyQuotes'
+        // turn on the given issue id's
+        enable 'RtlHardcoded', 'RtlCompat', 'RtlEnabled'
+        // check *only* the given issue id's
+        //check 'NewApi', 'InlinedApi'
+        // if true, don't include source code lines in the error output
+        noLines false
+        // if true, show all locations for an error, do not truncate lists, etc.
+        showAll true
+        // Fallback lint configuration (default severities, etc.)
+        lintConfig file("default-lint.xml")
+        // if true, generate a text report of issues (false by default)
+        textReport false
+        // location to write the output; can be a file or 'stdout'
+        textOutput 'stdout'
+        // if true, generate an XML report for use by for example Jenkins
+        xmlReport false
+        // file to write report to (if not specified, defaults to lint-results.xml)
+        xmlOutput file("build/reports/lint/lint-report.xml")
+        // if true, generate an HTML report (with issue explanations, sourcecode, etc)
+        htmlReport true
+        // optional path to report (default will be lint-results.html in the builddir)
+        htmlOutput file("build/reports/lint/lint-report.html")
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+
+    // Use Retrofit for API interaction
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.4.0'
+
+    // design support
+    compile 'com.android.support:design:25.3.1'
+
+    // Lombok
+    // https://projectlombok.org/setup/android.html
+    provided 'org.projectlombok:lombok:1.12.6'
+    annotationProcessor "org.projectlombok:lombok:1.12.6"
+
+    // Timber for logging
+    compile 'com.jakewharton.timber:timber:4.1.0'
+
+    // Butterknife for view injection
+    compile 'com.jakewharton:butterknife:7.0.1'
+
+    // Dagger 2
+    // Dagger 2 dependencies
+    compile 'com.google.dagger:dagger:2.8'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    //Tests
+    // Required -- JUnit 4 framework
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support:support-annotations:25.3.1'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+
+    // Optional -- Mockito framework
+    testCompile 'org.mockito:mockito-core:1.10.19'
+
+    // Optional -- UI testing with Espresso
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
+
+    // RX Android
+    compile 'io.reactivex:rxandroid:1.0.1'
+    compile 'io.reactivex:rxjava:1.0.14'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+}
