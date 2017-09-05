@@ -155,6 +155,8 @@ dependencies {
     // Dagger 2 dependencies
     compile 'com.google.dagger:dagger:2.8'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
+    compile 'com.google.code.gson:gson:2.8.1'
+
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
     androidTestCompile 'com.android.support:support-annotations:26.0.2'

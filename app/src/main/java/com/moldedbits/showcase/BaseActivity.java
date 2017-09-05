@@ -6,11 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import com.moldedbits.showcase.api.ApiService;
 import com.moldedbits.showcase.dialogs.LoadingDialog;
 import com.moldedbits.showcase.utils.fragmenttransactionhandler.FragmentTransactionHandler;
-
-import javax.inject.Inject;
 
 
 /**
@@ -18,9 +15,6 @@ import javax.inject.Inject;
  * on 08/01/16.
  */
 public abstract class BaseActivity extends AppCompatActivity {
-
-    @Inject
-    ApiService apiService;
 
     private FrameLayout contentFrame;
     protected FragmentTransactionHandler handler;
@@ -30,9 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_base);
 
-        BaseApplication.getInstance().getApiComponent().inject(this);
-
-        contentFrame = (FrameLayout) findViewById(R.id.base_container);
+        contentFrame = findViewById(R.id.base_container);
         handler = new FragmentTransactionHandler();
     }
 
