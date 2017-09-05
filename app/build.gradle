@@ -67,12 +67,6 @@ android {
             keyAlias "jumpstart"
             keyPassword "moldedbits"
         }
-        releaseProd {
-            storeFile file("../jumpstart.keystore")
-            storePassword "moldedbits"
-            keyAlias "jumpstart"
-            keyPassword "moldedbits"
-        }
     }
 
     buildTypes {
@@ -128,6 +122,12 @@ android {
         htmlReport true
         // optional path to report (default will be lint-results.html in the builddir)
         htmlOutput file("build/reports/lint/lint-report.html")
+    }
+
+    // Java 8 Support
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
