@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.moldedbits.showcase.SplashScreenActivity">
+    tools:context="com.moldedbits.showcase.splash.SplashScreenActivity">
 
-    <View
+    <com.moldedbits.showcase.splash.WaveView
         android:id="@+id/splashBg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,6 +18,11 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:src="@drawable/mb_logo_only"/>
+
+    <!--<com.moldedbits.showcase.splash.MBGridView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerInParent="true"/>-->
 
     <LinearLayout
         android:id="@+id/nameView"

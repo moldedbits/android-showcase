@@ -172,7 +172,6 @@ dependencies {
     // animations
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.3@aar'
-
 }
 repositories {
     mavenCentral()
