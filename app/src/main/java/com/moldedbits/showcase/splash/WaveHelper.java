@@ -3,8 +3,8 @@ package com.moldedbits.showcase.splash;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.support.v4.view.animation.FastOutLinearInInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class WaveHelper {
         // vertical animation.
         // water level increases from 0 to center of WaveView
         ObjectAnimator waterLevelAnim = ObjectAnimator.ofFloat(
-                mWaveView, "waterLevelRatio", 1.0f, -0.5f);
+                mWaveView, "waterLevelRatio", 1.0f, -0.0f);
         waterLevelAnim.setDuration(duration);
         waterLevelAnim.setInterpolator(new DecelerateInterpolator());
         animators.add(waterLevelAnim);
@@ -42,9 +42,9 @@ public class WaveHelper {
         // amplitude animation.
         // wave grows big then grows small, repeatedly
         ObjectAnimator amplitudeAnim = ObjectAnimator.ofFloat(
-                mWaveView, "amplitudeRatio", 0.04f, 0.2f);
+                mWaveView, "amplitudeRatio", 0.03f, .08f);
         amplitudeAnim.setDuration(duration);
-        amplitudeAnim.setInterpolator(new LinearInterpolator());
+        amplitudeAnim.setInterpolator(new DecelerateInterpolator());
         animators.add(amplitudeAnim);
 
         mAnimatorSet = new AnimatorSet();

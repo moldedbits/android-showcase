@@ -28,7 +28,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_example_app)
 
-        val duration = 3000
+        val duration = 4000
         waveHelper = WaveHelper(splashBg, duration)
         splashBg.setShapeType(WaveView.ShapeType.SQUARE)
         splashBg.waveShiftRatio = 0.0f
@@ -36,7 +36,9 @@ class SplashScreenActivity : AppCompatActivity() {
                 Color.parseColor("#ccFFFFFF"),
                 Color.parseColor("#ccFFFFFF"))
 
-        Handler().postDelayed({presentActivity(nameView)}, duration.toLong() )
+        splashBg.setOnClickListener{waveHelper?.start()}
+
+//        Handler().postDelayed({presentActivity(nameView)}, duration.toLong() )
     }
 
     private fun presentActivity(view: View) {
@@ -55,9 +57,9 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onResume()
         waveHelper?.start()
     }
-
-    override fun onPause() {
-        super.onPause()
-        waveHelper?.cancel()
-    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        waveHelper?.cancel()
+//    }
 }
