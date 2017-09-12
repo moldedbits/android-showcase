@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="background">#206EB5</color>
+    <color name="wave_background">#b2206eb5</color>
     <color name="background2">#1c62a1</color>
+    <color name="translucent">#dcffffff</color>
 </resources>

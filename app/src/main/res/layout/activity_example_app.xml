@@ -5,47 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/splash_bg"
     tools:context="com.moldedbits.showcase.splash.SplashScreenActivity">
 
     <com.moldedbits.showcase.splash.WaveView
         android:id="@+id/splashBg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background"/>
+        android:background="@color/wave_background"/>
 
-    <ImageView
-        android:id="@+id/logoIv"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/mb_logo_only"/>
-
-    <!--<com.moldedbits.showcase.splash.MBGridView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_centerInParent="true"/>-->
-
-    <LinearLayout
+    <TextView
         android:id="@+id/nameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/logoIv"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/text_2x"
-            android:textSize="@dimen/text_9x2"
-            android:textColor="@android:color/white"
-            android:text="molded"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/text_2x"
-            android:textSize="@dimen/text_9x2"
-            android:text="bits"/>
-    </LinearLayout>
+        android:layout_marginTop="@dimen/text_2x"
+        android:textSize="@dimen/text_9x2"
+        android:textColor="@android:color/white"
+        android:layout_centerInParent="true"
+        android:text="@string/moldedbits"/>
 </RelativeLayout>

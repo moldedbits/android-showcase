@@ -44,7 +44,7 @@ open class HomeActivity : AppCompatActivity() {
                 })
             }
         } else {
-            rootLayout.setVisibility(View.VISIBLE)
+            rootLayout.visibility = View.VISIBLE
         }
     }
 
@@ -69,7 +69,7 @@ open class HomeActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             finish()
         } else {
-            val finalRadius = (Math.max(rootLayout.width, rootLayout.height) * 1.1) as Float
+            val finalRadius = (Math.max(rootLayout.width, rootLayout.height) * 1.1).toFloat()
             val circularReveal = ViewAnimationUtils.createCircularReveal(
                     rootLayout, revealX, revealY, finalRadius, 0f)
 

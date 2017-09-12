@@ -240,7 +240,7 @@ public class WaveView extends View {
         for (int beginX = 0; beginX < endX; beginX++) {
             double wx = beginX * mDefaultAngularFrequency;
             float beginY = (float) (mDefaultWaterLevel + mDefaultAmplitude
-                    * (Math.sin(2*wx) + Math.cos(3*wx) /*+ Math.sin(0.5 * wx + 3)*/));
+                    * (Math.sin(2*wx) + Math.cos(3*wx)));
             canvas.drawLine(beginX, beginY, beginX, endY, wavePaint);
 
             waveY[beginX] = beginY;
