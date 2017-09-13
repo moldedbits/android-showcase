@@ -11,6 +11,9 @@ import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import timber.log.Timber
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
+import kotlin.collections.HashMap
 
 /**
  * Created by abhishek
@@ -28,28 +31,42 @@ class MBGridView : View {
 
     private var animator: ValueAnimator? = null
     private var paint: Paint = Paint()
-    var nHorizontalRects: Int = 20
-    var nVerticalRects: Int = 40
+    private var nHorizontalRects: Int = 20
+    private var nVerticalRects: Int = 40
 
     private var isIntialized: Boolean = false
-    lateinit var flippableRects: List<FlippableRect>
 
+    // determines how many variations do we need for starting flip
+    private val nVariations: Int = 10
+
+    // one scale factor for each variation
+    private lateinit var scaleFactors: MutableMap<Int, Float>
+
+    // buckets for different animation intervals
+    private lateinit var flippingRects: MutableMap<Int, MutableList<FlippableRect>>
     private fun init() {
-        animator = ValueAnimator.ofFloat(1.0f, 0.0f, -1.0f)
-        animator?.duration = 1000
-        animator?.repeatCount = ValueAnimator.INFINITE
-        animator?.start()
+        scaleFactors = HashMap()
+        for(i in 0 until nVariations) {
+            animator = ValueAnimator.ofFloat(1.0f, 0.0f, -1.0f)
+            animator?.duration = 1000
+            animator?.repeatCount = ValueAnimator.INFINITE
+            animator?.start()
+            animator.
 
-        paint.color = Color.WHITE
-        animator?.addUpdateListener { updateAnimation ->
-            scaleFactor = updateAnimation.animatedValue as Float
-            invalidate()
-//            if(scaleFactor < 0.0) {
-//                rect.paint.color = Color.RED
-//            }
+            animator?.addUpdateListener { updateAnimation ->
+                val scaleFactor = updateAnimation.animatedValue as Float
+                updateAnimation.
+                invalidate()
+            }
         }
 
-        val squareDimension: Float =  50.0f
+
+
+        paint.color = Color.WHITE
+
+
+        val squareDimension =  50.0f
+        flippingRects = HashMap()
         Observable.just(1)
                 .subscribeOn(Schedulers.io())
                 .map {
@@ -60,6 +77,15 @@ class MBGridView : View {
                                     x * squareDimension,
                                     (y + 1) * squareDimension,
                                     (x + 1) * squareDimension)
+
+                            // put rects randomly in buckets
+                            val key = ThreadLocalRandom.current().nextInt(0, nVariations)
+                            if(flippingRects.containsKey(key)) {
+                                flippingRects.getValue(key).add(rect)
+                            } else {
+                                flippingRects.put(key, mutableListOf(rect))
+                            }
+
                             Timber.d("x: %d y: %d %d %d %d %d", x, y, top, left, bottom, right)
                             rect.paint.color = Color.WHITE
                             rectList.add(rect)
@@ -69,13 +95,8 @@ class MBGridView : View {
                     return@map rectList
                 }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {  rectList: List<FlippableRect> ->
-                    isIntialized = true
-                    flippableRects = rectList
-                }
+                .subscribe { isIntialized = true }
     }
-
-    private var scaleFactor:Float = 0.0f
 
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
