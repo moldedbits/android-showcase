@@ -10,14 +10,13 @@
     <com.moldedbits.showcase.splash.gridview.MBGridView
         android:id="@+id/mbGridView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"/>
+        android:layout_height="match_parent"/>
 
-    <com.moldedbits.showcase.splash.WaveView
+<!--    <com.moldedbits.showcase.splash.WaveView
         android:id="@+id/splashBg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/wave_background"/>
+        android:background="@color/wave_background"/>-->
 
     <TextView
         android:id="@+id/nameView"

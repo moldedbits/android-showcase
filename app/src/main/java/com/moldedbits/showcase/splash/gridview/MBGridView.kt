@@ -28,16 +28,13 @@ class MBGridView : View {
     private var isIntialized: Boolean = false
 
     // Animation flipDuration in millisecond for each flip
-    var flipDuration: Long = 1500
+    var flipDuration: Long = 1000
 
     // Duration for complete animation
     var animationDuration: Long = 3000
 
     // determines how many variations do we need for starting flip
-    private val nVariations: Int = 12
-
-    // one scale factor for each variation
-    private lateinit var scaleFactors: MutableMap<Int, Float>
+    private val nVariations: Int = 40
 
     // starting color of rects
     var startColor:Int = Color.WHITE
@@ -49,15 +46,14 @@ class MBGridView : View {
     private var flippingBuckets: MutableMap<Int, FlippingBucket> = HashMap()
 
     // offset between successive rects
-    private var border = 5
+    private var border = 0
 
     // needed size of a square
-    val squareDimension =  40.0f
+    val squareDimension =  55
 
     private var animator: ValueAnimator? = null
 
     private fun init() {
-        scaleFactors = HashMap()
 
         for(i in 0 until nVariations) {
             val bucket = FlippingBucket()
@@ -68,9 +64,11 @@ class MBGridView : View {
             val hsv: FloatArray = kotlin.FloatArray(3)
             Color.colorToHSV(endColor, hsv)
             var saturation = hsv[1]
+
             Timber.d(" Before: %f", hsv[1])
-            saturation -= ThreadLocalRandom.current().nextInt(0, 10)/20.0f
+            saturation -= ThreadLocalRandom.current().nextInt(0, 5)/20.0f
             hsv[1] = saturation
+
             Timber.d("After: %f", hsv[1])
 
             bucket.endColor = Color.HSVToColor(hsv)
@@ -82,10 +80,10 @@ class MBGridView : View {
                 .map {
                     for (y in 0 until nVerticalRects) {
                         for(x in 0 until nHorizontalRects) {
-                            val rect = FlippableRect(border + y  * squareDimension,
-                                    border + x * squareDimension,
-                                    (y + 1) * squareDimension,
-                                    (x + 1) * squareDimension)
+                            val rect = FlippableRect((border + y  * squareDimension).toFloat(),
+                                    (border + x * squareDimension).toFloat(),
+                                    ((y + 1) * squareDimension).toFloat(),
+                                    ((x + 1) * squareDimension).toFloat())
 
                             // put rects randomly in buckets
                             val key = ThreadLocalRandom.current().nextInt(0, nVariations)
@@ -100,13 +98,27 @@ class MBGridView : View {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     isIntialized = true
-                    animator = ValueAnimator.ofFloat(1.0f, 0.0f)
+                    animator = ValueAnimator.ofFloat(0.0f, 1.0f)
                     animator?.duration = animationDuration
-                    animator?.addUpdateListener { invalidate() }
-                    invalidate()
-//                    animator.repeatCount = ValueAnimator.INFINITE
-//                    animator.repeatMode = ValueAnimator.REVERSE
+                    animator?.addUpdateListener { updatedAnimation ->
+                        invalidate()
 
+//                        if(border > 0 && updatedAnimation.animatedValue as Float >= 0.5f) {
+//                            val backgroundAnimator: ValueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f)
+//                            backgroundAnimator.duration = 1000
+//                            backgroundAnimator.start()
+//                            backgroundAnimator.addUpdateListener { updatedBgAnimation ->
+//                                val alphaFactor = updatedBgAnimation.animatedValue as Float
+//                                val color:Int = ContextCompat.getColor(context, R.color.background2)
+//                                setBackgroundColor(Color.argb((Color.alpha(color).toFloat() * alphaFactor).toInt(),
+//                                        Color.red(color), Color.green(color), Color.blue(color)))
+//                            }
+//                        }
+                    }
+
+                    invalidate()
+//                    animator?.repeatCount = ValueAnimator.INFINITE
+//                    animator?.repeatMode = ValueAnimator.REVERSE
                 }
     }
 
@@ -123,8 +135,8 @@ class MBGridView : View {
         super.onSizeChanged(w, h, oldw, oldh)
 
         if(!isIntialized) {
-            nHorizontalRects = Math.ceil((w.toFloat()/squareDimension).toDouble()).toInt()
-            nVerticalRects = Math.ceil((h.toFloat()/squareDimension).toDouble()).toInt()
+            nHorizontalRects = Math.ceil((w.toFloat() / squareDimension).toDouble()).toInt()
+            nVerticalRects = Math.ceil((h.toFloat() / squareDimension).toDouble()).toInt()
             init()
         }
     }

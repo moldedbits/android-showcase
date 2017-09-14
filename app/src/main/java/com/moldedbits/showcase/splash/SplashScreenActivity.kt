@@ -29,15 +29,15 @@ class SplashScreenActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_example_app)
 
-        val duration = 4000
-        waveHelper = WaveHelper(splashBg, duration)
-        splashBg.setShapeType(WaveView.ShapeType.SQUARE)
-        splashBg.waveShiftRatio = 0.0f
-        splashBg.setWaveColor(
-                Color.parseColor("#ccFFFFFF"),
-                Color.parseColor("#ccFFFFFF"))
-
-        splashBg.setOnClickListener{waveHelper?.start()}
+        val duration = 1000
+//        waveHelper = WaveHelper(splashBg, duration)
+//        splashBg.setShapeType(WaveView.ShapeType.SQUARE)
+//        splashBg.waveShiftRatio = 0.0f
+//        splashBg.setWaveColor(
+//                Color.parseColor("#ccFFFFFF"),
+//                Color.parseColor("#ccFFFFFF"))
+//
+//        splashBg.setOnClickListener{waveHelper?.start()}
 
         mbGridView.startColor = ContextCompat.getColor(this, R.color.start_color)
         mbGridView.endColor = ContextCompat.getColor(this, R.color.end_color)
@@ -61,7 +61,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        waveHelper?.start()
+//        waveHelper?.start()
     }
 //
 //    override fun onPause() {
