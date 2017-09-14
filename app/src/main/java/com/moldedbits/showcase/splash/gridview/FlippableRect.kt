@@ -30,13 +30,13 @@ class FlippableRect {
         this.pivotX = (right + left) / 2
         this.pivotY = (bottom + top) /2
 
-        Timber.d("px: %f py: %f %f %f %f %f", pivotX, pivotY, top, left, bottom, right)
         paint = Paint()
     }
     
-    fun draw(canvas:Canvas?, scaleFactor: Float) {
+    fun draw(canvas:Canvas?, scaleFactor: Float, color:Int) {
         canvas?.save()
         canvas?.scale(scaleFactor, 1.0f, pivotX, pivotY)
+        paint.color = color
         canvas?.drawRect(left, top, right, bottom, paint)
         canvas?.restore()
     }
